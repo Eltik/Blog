@@ -11,7 +11,8 @@
     "db:studio": "prisma studio",
     "dev": "next dev",
     "postinstall": "prisma generate",
-    "lint": "next lint",
+    "lint": "bun run prettier && next lint",
+    "prettier": "bunx prettier --write .",
     "start": "next start"
   },
   "dependencies": {
