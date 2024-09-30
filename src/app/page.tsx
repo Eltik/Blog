@@ -15,11 +15,11 @@ export default async function Home() {
     return (
         <HydrateClient>
             <main>
-                <div className="bg-bg-hero rounded-3xl max-w-[95%] mx-auto mt-5">
+                <div className="mx-auto mt-5 max-w-[95%] rounded-3xl bg-bg-hero">
                     <Navigation />
                     <Hero />
                 </div>
-                <div className="rounded-3xl max-w-[95%] mx-auto mt-5">
+                <div className="mx-auto mt-5 max-w-[95%] rounded-3xl">
                     <Posts />
                 </div>
             </main>

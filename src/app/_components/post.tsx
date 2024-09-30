@@ -17,9 +17,11 @@ export function Posts() {
 
     return (
         <div className="w-full max-w-xs">
-            {posts ? posts.map((post) => {
-                return <p key={post.id}>{post.title}</p>;
-            }) : (
+            {posts ? (
+                posts.map((post) => {
+                    return <p key={post.id}>{post.title}</p>;
+                })
+            ) : (
                 <p>You have no posts yet.</p>
             )}
         </div>

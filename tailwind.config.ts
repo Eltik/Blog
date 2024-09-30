@@ -11,8 +11,8 @@ export default {
             colors: {
                 "bg-hero": "#181820",
                 "bg-button": "#2a2a32",
-                "bg-search": "#343439"
-            }
+                "bg-search": "#343439",
+            },
         },
     },
     plugins: [],
