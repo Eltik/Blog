@@ -1,10 +1,11 @@
-import Link from "next/link";
-
 import { Posts } from "~/app/_components/home/posts";
 import { api, HydrateClient } from "~/trpc/server";
 import { Hero } from "./_components/home/hero";
 import { Navigation } from "./_components/navigation";
 
+/**
+ * Credit: https://dribbble.com/shots/20802507-Blog-posts
+ */
 export default async function Home() {
     const hello = await api.post.hello({ text: "from tRPC" });
 
