@@ -1,18 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 
-"use client";
-
-import { useStore } from "zustand";
+import Link from "next/link";
 import { useUserData } from "~/store/store";
-import { api } from "~/trpc/server";
-import type { User } from "~/types";
+import { api } from "~/utils/api";
 
 export function Login() {
-    const userData = useStore(useUserData, (state: any) => state.user as User);
+    const loginMutation = api.user.login.useMutation();
 
     const handleLogin = async () => {
-        const email = document.getElementById("username") as HTMLInputElement;
+        const email = document.getElementById("email") as HTMLInputElement;
         const password = document.getElementById("password") as HTMLInputElement;
 
         if (!email || !password) {
@@ -24,15 +21,18 @@ export function Login() {
             password: password.value,
         };
 
-        const response = await fetch("/api/login", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(user),
-        });
+        try {
+            const data = await loginMutation.mutateAsync(user);
+            useUserData.setState({ user: data });
 
-        const data = await api.user.login(user);
+            alert("Logged in successfully.");
+
+            window.location.href = "/";
+        } catch (error) {
+            console.error(error);
+
+            alert("Invalid credentials.");
+        }
     };
 
     return (
@@ -42,10 +42,10 @@ export function Login() {
                     <h1 className="ml-5 mt-5 text-3xl font-semibold">Login</h1>
                     <div className="mx-auto mt-5 h-[1px] w-[95%] rounded-lg bg-zinc-500/30"></div>
                     <div className="mt-5 flex w-full flex-col">
-                        <label htmlFor="username" className="text-lg font-semibold">
-                            Username
+                        <label htmlFor="email" className="text-lg font-semibold">
+                            Email
                         </label>
-                        <input className="flex h-10 w-full rounded-md border border-[hsl(240,5.9%,90%)] bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-gray-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(240,5%,64.9%)] focus-visible:ring-offset-2" id="username" placeholder="Enter your email..." type="email" />
+                        <input className="flex h-10 w-full rounded-md border border-[hsl(240,5.9%,90%)] bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-gray-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(240,5%,64.9%)] focus-visible:ring-offset-2" id="email" placeholder="Enter your email..." type="email" />
                         <label htmlFor="password" className="mt-5 text-lg font-semibold">
                             Password
                         </label>
@@ -53,7 +53,9 @@ export function Login() {
                         <button className="mt-5 w-full rounded-lg bg-zinc-500 p-2 font-semibold text-white" onClick={handleLogin}>
                             Login
                         </button>
-                        <button className="mt-5 w-full rounded-lg bg-zinc-500 p-2 font-semibold text-white">Register</button>
+                        <Link className="mt-5 w-full rounded-lg bg-zinc-500 p-2 font-semibold text-white" href={"/register"}>
+                            Not registered? Register
+                        </Link>
                     </div>
                 </div>
             </div>

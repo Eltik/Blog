@@ -37,7 +37,7 @@ export const userRouter = createTRPCRouter({
                 password: z.string().min(8),
             }),
         )
-        .query(async ({ ctx, input }) => {
+        .mutation(async ({ ctx, input }) => {
             const user = await ctx.db.user.findUnique({
                 where: { email: input.email },
             });
@@ -55,19 +55,43 @@ export const userRouter = createTRPCRouter({
             return user;
         }),
 
-    getUser: publicProcedure.input(z.object({ id: z.number() })).query(async ({ ctx, input }) => {
+    loginEncrypted: publicProcedure
+        .input(
+            z.object({
+                email: z.string().email(),
+                password: z.string().min(8),
+            }),
+        )
+        .mutation(async ({ ctx, input }) => {
+            const user = await ctx.db.user.findUnique({
+                where: { email: input.email },
+            });
+
+            if (!user) {
+                throw new Error("User not found.");
+            }
+
+            const isValid = user.password === input.password;
+
+            if (!isValid) {
+                throw new Error("Invalid password.");
+            }
+
+            return user;
+        }),
+    getUser: publicProcedure.input(z.object({ id: z.number() })).mutation(async ({ ctx, input }) => {
         return ctx.db.user.findUnique({
             where: { id: input.id },
         });
     }),
 
-    getUserByEmail: publicProcedure.input(z.object({ email: z.string().email() })).query(async ({ ctx, input }) => {
+    getUserByEmail: publicProcedure.input(z.object({ email: z.string().email() })).mutation(async ({ ctx, input }) => {
         return ctx.db.user.findUnique({
             where: { email: input.email },
         });
     }),
 
-    getUsers: publicProcedure.query(async ({ ctx }) => {
+    getUsers: publicProcedure.mutation(async ({ ctx }) => {
         return ctx.db.user.findMany({
             orderBy: { createdAt: "desc" },
         });

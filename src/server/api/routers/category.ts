@@ -17,6 +17,22 @@ export const categoryRouter = createTRPCRouter({
         });
     }),
 
+    getCategory: publicProcedure.input(z.object({ id: z.number().int().positive() })).query(async ({ ctx, input }) => {
+        return ctx.db.categories.findUnique({
+            where: {
+                id: input.id,
+            },
+        });
+    }),
+
+    getCategoryByName: publicProcedure.input(z.object({ name: z.string().min(1) })).mutation(async ({ ctx, input }) => {
+        return ctx.db.categories.findUnique({
+            where: {
+                name: input.name,
+            },
+        });
+    }),
+
     getCategories: publicProcedure.query(async ({ ctx }) => {
         return ctx.db.categories.findMany({
             orderBy: { createdAt: "desc" },

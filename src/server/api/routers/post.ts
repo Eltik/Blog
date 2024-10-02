@@ -30,14 +30,14 @@ export const postRouter = createTRPCRouter({
             });
         }),
 
-    getPosts: publicProcedure.input(z.object({ limit: z.number().int().positive() })).query(async ({ ctx, input }) => {
+    getPosts: publicProcedure.input(z.object({ limit: z.number().int().positive() })).mutation(async ({ ctx, input }) => {
         return ctx.db.post.findMany({
             orderBy: { createdAt: "desc" },
             take: input.limit,
         });
     }),
 
-    getLatestPost: publicProcedure.query(async ({ ctx }) => {
+    getLatestPost: publicProcedure.mutation(async ({ ctx }) => {
         const post = await ctx.db.post.findFirst({
             orderBy: { createdAt: "desc" },
         });
