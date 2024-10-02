@@ -1,13 +1,10 @@
 import Head from "next/head";
 
-import { api } from "~/utils/api";
 import { Navigation } from "./components/navigation";
 import { Hero } from "./components/home/hero";
 import { Posts } from "./components/home/posts";
 
 export default function Home() {
-    const hello = api.post.hello.useQuery({ text: "from tRPC" });
-
     return (
         <>
             <Head>
