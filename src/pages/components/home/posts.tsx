@@ -13,7 +13,7 @@ export function Posts() {
                 {(posts.data?.length ?? 0) > 0 ? (
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                         {posts.data?.map((post) => (
-                            <Link key={post.id} href={`/blogs/${post.id}`} className="flex">
+                            <Link key={post.id} href={`/post/${post.id}`} className="flex">
                                 <div className="duration-115 relative flex w-full flex-col overflow-hidden rounded-3xl bg-white shadow-lg transition-all hover:scale-105">
                                     <div className="h-56 overflow-hidden">
                                         <Image src="/posts/temp.jpeg" alt="A Kid Called Beast" className="h-full w-full object-cover" width={50} height={50} />
