@@ -63,15 +63,13 @@ export default function CreateBlog() {
             });
 
             try {
-                const post = await postMutation.mutateAsync({
+                await postMutation.mutateAsync({
                     authorId: data.id,
                     categoryId: category,
                     content,
                     name: title,
-                    imageThumbnail: "asdf",
+                    imageThumbnail: imageData ?? "",
                 });
-
-                console.log(post);
 
                 alert("Successfully created blog post.");
 
