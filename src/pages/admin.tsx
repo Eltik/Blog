@@ -1,4 +1,4 @@
-import { Admin as AdminComponent } from "./components/admin/admin";
+import AdminComponent from "./components/admin/admin";
 
 export default function Admin() {
     return (

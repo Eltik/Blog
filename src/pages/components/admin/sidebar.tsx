@@ -1,7 +1,7 @@
 import { BellDot, FolderOpenDot, HardDrive, LayoutDashboard, ListChecks, MessageSquareMore, Rss } from "lucide-react";
 import React from "react";
 
-export function Sidebar() {
+export default function Sidebar() {
     return (
         <>
             <aside className="flex w-64 flex-col rounded-3xl bg-white p-6 shadow-lg">

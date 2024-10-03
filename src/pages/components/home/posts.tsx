@@ -3,7 +3,7 @@ import Link from "next/link";
 import { api } from "~/utils/api";
 import React from "react";
 
-export function Posts() {
+export default function Posts() {
     const posts = api.post.getPosts.useQuery({ limit: 10 });
     const categories = api.category.getCategories.useQuery();
 
@@ -16,7 +16,12 @@ export function Posts() {
                             <Link key={post.id} href={`/post/${post.id}`} className="flex">
                                 <div className="duration-115 relative flex w-full flex-col overflow-hidden rounded-3xl bg-white shadow-lg transition-all hover:scale-105">
                                     <div className="h-56 overflow-hidden">
-                                        <Image src="/posts/temp.jpeg" alt="A Kid Called Beast" className="h-full w-full object-cover" width={50} height={50} />
+                                        {post.image ? (
+                                            // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion, @typescript-eslint/no-unsafe-assignment
+                                            <Image src={post.image} alt={post.title} className="h-full w-full object-cover" width={50} height={50} />
+                                        ) : (
+                                            <Image src="/posts/temp.jpeg" alt={post.title} className="h-full w-full object-cover" width={50} height={50} />
+                                        )}
                                     </div>
 
                                     <div className="relative bg-white p-6">

@@ -1,6 +1,6 @@
-import { Register as RegisterComponent } from "./components/register/register";
+import RegisterComponent from "./components/register/register";
 
-export default function Login() {
+export default function Register() {
     return (
         <main>
             <div className="mx-auto mt-5 max-w-[95%] rounded-3xl">

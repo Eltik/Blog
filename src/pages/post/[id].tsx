@@ -2,7 +2,7 @@ import type { NextPage } from "next";
 import { api } from "~/utils/api";
 import React from "react";
 import Head from "next/head";
-import { Navigation } from "../components/navigation";
+import Navigation from "../components/navigation";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import remarkBreaks from "remark-breaks";

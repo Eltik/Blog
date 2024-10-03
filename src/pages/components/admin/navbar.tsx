@@ -1,7 +1,7 @@
 import { LayoutDashboard, List, Search } from "lucide-react";
 import React from "react";
 
-export function Navbar() {
+export default function Navbar() {
     return (
         <>
             <div className="mx-auto w-full max-w-4xl p-4">

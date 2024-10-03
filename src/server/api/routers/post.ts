@@ -16,6 +16,7 @@ export const postRouter = createTRPCRouter({
                 categoryId: z.number().int().positive(),
                 authorId: z.number().int().positive(),
                 content: z.string().min(1),
+                imageThumbnail: z.string(),
             }),
         )
         .mutation(async ({ ctx, input }) => {
@@ -25,6 +26,7 @@ export const postRouter = createTRPCRouter({
                     categoryId: input.categoryId,
                     authorId: input.authorId,
                     content: input.content,
+                    image: input.imageThumbnail,
                     published: true,
                 },
             });

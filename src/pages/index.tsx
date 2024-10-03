@@ -1,8 +1,8 @@
 import Head from "next/head";
 
-import { Navigation } from "./components/navigation";
-import { Hero } from "./components/home/hero";
-import { Posts } from "./components/home/posts";
+import Navigation from "./components/navigation";
+import Hero from "./components/home/hero";
+import Posts from "./components/home/posts";
 import React from "react";
 
 export default function Home() {

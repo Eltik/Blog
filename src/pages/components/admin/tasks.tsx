@@ -1,7 +1,7 @@
 import { Clock } from "lucide-react";
 import React from "react";
 
-export function Tasks() {
+export default function Tasks() {
     return (
         <>
             <div className="mx-auto w-full max-w-4xl p-4">

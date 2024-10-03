@@ -1,13 +1,13 @@
-import { Sidebar } from "./sidebar";
-import { Navbar } from "./navbar";
-import { Tasks } from "./tasks";
-import { CreateBlog } from "./create-blog";
-import { CreateCategory } from "./create-category";
+import Sidebar from "./sidebar";
+import Navbar from "./navbar";
+import Tasks from "./tasks";
+import CreateBlog from "./create-blog";
+import CreateCategory from "./create-category";
 
 /**
  * Credit: https://dribbble.com/shots/20786200-Bress-Admin-Dashboard-Analytics-UX
  */
-export function Admin() {
+export default function Admin() {
     return (
         <div>
             <div className="flex h-full rounded-3xl bg-slate-100 px-11 py-5">

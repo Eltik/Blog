@@ -11,7 +11,7 @@ import { useUserData } from "~/store/store";
 import type { User } from "~/types";
 import React from "react";
 
-export function CreateBlog() {
+export default function CreateBlog() {
     const categories = api.category.getCategories.useQuery().data;
 
     const loginMutation = api.user.loginEncrypted.useMutation();
@@ -20,6 +20,7 @@ export function CreateBlog() {
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [category, setCategory] = useState(1);
+    const [imageData, setImageData] = useState<string | null>(null);
 
     const userData = useStore(useUserData, (state: any) => state.user as User);
 
@@ -33,6 +34,19 @@ export function CreateBlog() {
 
     const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setCategory(parseInt(e.target.value));
+    };
+
+    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            // Simulating an upload and generating a URL
+            const reader = new FileReader();
+            reader.onload = () => {
+                const base64String = reader.result as string;
+                setImageData(base64String);
+            };
+            reader.readAsDataURL(file);
+        }
     };
 
     const handleSubmit = async (e: React.FormEvent<HTMLButtonElement>) => {
@@ -54,6 +68,7 @@ export function CreateBlog() {
                     categoryId: category,
                     content,
                     name: title,
+                    imageThumbnail: "asdf",
                 });
 
                 console.log(post);
@@ -106,6 +121,12 @@ export function CreateBlog() {
                                         </option>
                                     ))}
                                 </select>
+                            </div>
+                            <div>
+                                <label htmlFor="image" className="mb-2 block text-lg font-medium">
+                                    Upload Image
+                                </label>
+                                <input type="file" id="image" accept="image/*" onChange={handleImageUpload} className="block w-full cursor-pointer rounded-lg border border-gray-300 bg-gray-50 text-sm text-gray-900 focus:outline-none" />
                             </div>
                             <button type="submit" className="rounded-md bg-gray-900 px-4 py-2 text-white hover:bg-gray-700" onClick={handleSubmit}>
                                 Submit Blog

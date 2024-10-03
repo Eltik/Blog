@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useUserData } from "~/store/store";
 import { api } from "~/utils/api";
 
-export function Login() {
+export default function Login() {
     const loginMutation = api.user.login.useMutation();
 
     const handleLogin = async () => {

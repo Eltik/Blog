@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import { useState, useRef, useEffect } from "react";
 import React from "react";
 
-export function Navigation() {
+export default function Navigation() {
     const pathname = usePathname();
     const [hoveredLink, setHoveredLink] = useState<string | null>(null);
     const [lineStyle, setLineStyle] = useState({ width: 0, left: 0 });

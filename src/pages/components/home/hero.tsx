@@ -3,7 +3,7 @@ import { Dot } from "lucide-react";
 import { api } from "~/utils/api";
 import React from "react";
 
-export function Hero() {
+export default function Hero() {
     const categories = api.category.getCategories.useQuery();
 
     return (

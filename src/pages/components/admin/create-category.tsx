@@ -8,7 +8,7 @@ import { useUserData } from "~/store/store";
 import { api } from "~/utils/api";
 import React from "react";
 
-export function CreateCategory() {
+export default function CreateCategory() {
     const userData = useStore(useUserData, (state: any) => state.user as User);
 
     const loginMutation = api.user.loginEncrypted.useMutation();

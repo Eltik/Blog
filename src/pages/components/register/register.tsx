@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { api } from "~/utils/api";
 
-export function Register() {
+export default function Register() {
     const registerMutation = api.user.create.useMutation();
     const userMutation = api.user.getUserByEmail.useMutation();
 
