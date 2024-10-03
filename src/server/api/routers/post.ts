@@ -30,6 +30,14 @@ export const postRouter = createTRPCRouter({
             });
         }),
 
+    getPost: publicProcedure.input(z.object({ id: z.number().int().positive() })).query(async ({ ctx, input }) => {
+        return ctx.db.post.findUnique({
+            where: {
+                id: input.id,
+            },
+        });
+    }),
+
     getPosts: publicProcedure.input(z.object({ limit: z.number().int().positive() })).query(async ({ ctx, input }) => {
         return ctx.db.post.findMany({
             orderBy: { createdAt: "desc" },

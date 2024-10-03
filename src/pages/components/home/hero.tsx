@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Dot } from "lucide-react";
 import { api } from "~/utils/api";
+import React from "react";
 
 export function Hero() {
     const categories = api.category.getCategories.useQuery();
