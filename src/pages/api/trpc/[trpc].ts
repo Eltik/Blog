@@ -9,6 +9,7 @@ export default createNextApiHandler({
     router: appRouter,
     createContext: createTRPCContext,
     maxBodySize: 100000,
+    allowBatching: true,
     onError:
         env.NODE_ENV === "development"
             ? ({ path, error }) => {
@@ -20,8 +21,8 @@ export default createNextApiHandler({
 export const config = {
     api: {
         bodyParser: {
-            sizeLimit: "4mb",
+            sizeLimit: "100mb",
         },
-        responseLimit: "4mb",
+        responseLimit: "100mb",
     },
 };

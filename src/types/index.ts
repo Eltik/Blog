@@ -28,6 +28,7 @@ export type Post = {
     authorId?: number;
     category?: Categories;
     categoryId?: number;
+    image?: string;
     createdAt: Date;
     updatedAt: Date;
 };

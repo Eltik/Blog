@@ -40,18 +40,60 @@ export const postRouter = createTRPCRouter({
         });
     }),
 
-    getPosts: publicProcedure.input(z.object({ limit: z.number().int().positive() })).query(async ({ ctx, input }) => {
-        return ctx.db.post.findMany({
-            orderBy: { createdAt: "desc" },
-            take: input.limit,
-        });
+    getPosts: publicProcedure
+        .input(
+            z.object({
+                limit: z.number().int().positive(),
+            }),
+        )
+        .query(async ({ ctx, input }) => {
+            return ctx.db.post.findMany({
+                orderBy: { createdAt: "desc" },
+                take: input.limit,
+            });
+        }),
+
+    getPostsByPage: publicProcedure
+        .input(
+            z.object({
+                limit: z.number().int().positive(),
+                offset: z.number().int(),
+            }),
+        )
+        .query(async ({ ctx, input }) => {
+            return ctx.db.post.findMany({
+                orderBy: { createdAt: "desc" },
+                take: input.limit,
+                skip: input.offset,
+            });
+        }),
+
+    getTotalPosts: publicProcedure.query(async ({ ctx }) => {
+        return ctx.db.post.count();
     }),
 
-    getLatestPost: publicProcedure.mutation(async ({ ctx }) => {
-        const post = await ctx.db.post.findFirst({
-            orderBy: { createdAt: "desc" },
-        });
-
-        return post ?? null;
-    }),
+    editPost: publicProcedure
+        .input(
+            z.object({
+                id: z.number().int().positive(),
+                title: z.string().min(1),
+                content: z.string().min(1),
+                categoryId: z.number().int().positive(),
+                imageThumbnail: z.string(),
+            }),
+        )
+        .mutation(async ({ ctx, input }) => {
+            return ctx.db.post.update({
+                where: {
+                    id: input.id,
+                },
+                data: {
+                    title: input.title,
+                    content: input.content,
+                    categoryId: input.categoryId,
+                    image: input.imageThumbnail,
+                    updatedAt: new Date(Date.now()),
+                },
+            });
+        }),
 });
