@@ -10,6 +10,7 @@ import { useStore } from "zustand";
 import { useUserData } from "~/store/store";
 import type { User } from "~/types";
 import React from "react";
+import rehypeRaw from "rehype-raw";
 
 export default function CreateBlog() {
     const categories = api.category.getCategories.useQuery().data;
@@ -134,7 +135,15 @@ export default function CreateBlog() {
                     <div className="mb-5 ml-5 mt-10">
                         <h2 className="mb-4 text-2xl font-semibold">Preview</h2>
                         <div className="rounded-md border bg-gray-50 p-4">
-                            <ReactMarkdown remarkPlugins={[remarkGfm, remarkBreaks]}>{content}</ReactMarkdown>
+                            <ReactMarkdown 
+                                remarkPlugins={[remarkGfm, remarkBreaks]} 
+                                rehypePlugins={[rehypeRaw]} 
+                                components={{
+                                    pre: ({ node, ...props }) => <pre style={{ whiteSpace: "pre-wrap" }} {...props} />,
+                                }}
+                            >
+                                {content}
+                            </ReactMarkdown>
                         </div>
                     </div>
                 </div>

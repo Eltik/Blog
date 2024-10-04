@@ -9,10 +9,6 @@ on:
     pull_request:
         branches: ["main"]
 
-env:
-    NODE_VERSION: 14.x
-    DATABASE_URL: ${{ secrets.DATABASE_URL }}
-
 jobs:
     build:
         name: Build
