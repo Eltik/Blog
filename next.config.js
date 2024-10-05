@@ -3,6 +3,7 @@
  * for Docker builds.
  */
 await import("./src/env.js");
+import removeImports from "next-remove-imports";
 
 /** @type {import("next").NextConfig} */
 const config = {
@@ -20,4 +21,4 @@ const config = {
     transpilePackages: ["geist"],
 };
 
-export default config;
+export default removeImports()(config);

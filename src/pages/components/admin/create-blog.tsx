@@ -1,16 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 
-import { useState } from "react";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
-import remarkBreaks from "remark-breaks";
+import { useRef, useState } from "react";
 import { api } from "~/utils/api";
 import { useStore } from "zustand";
 import { useUserData } from "~/store/store";
 import type { User } from "~/types";
 import React from "react";
-import rehypeRaw from "rehype-raw";
+
+import dynamic from "next/dynamic";
+
+const MarkdownPreview = dynamic(() => import("@uiw/react-markdown-preview"), { ssr: false });
 
 export default function CreateBlog() {
     const categories = api.category.getCategories.useQuery().data;
@@ -22,6 +22,8 @@ export default function CreateBlog() {
     const [content, setContent] = useState("");
     const [category, setCategory] = useState(1);
     const [imageData, setImageData] = useState<string | null>(null);
+
+    const editorRef = useRef<HTMLDivElement | null>(null);
 
     const userData = useStore(useUserData, (state: any) => state.user as User);
 
@@ -89,6 +91,98 @@ export default function CreateBlog() {
         }
     };
 
+    const handlePaste = (e: React.ClipboardEvent<HTMLDivElement>) => {
+        const image = e.clipboardData.files[0];
+
+        if (!image) {
+            return;
+        }
+
+        e.preventDefault();
+
+        const formData = new FormData();
+        formData.append("file", image);
+
+        document.cookie = `email=${userData.email}; path=/;`;
+        document.cookie = `password=${userData.password}; path=/;`;
+
+        void fetch("/api/upload", {
+            method: "POST",
+            headers: {
+                Cookie: `email=${userData.email}; password=${userData.password};`,
+            },
+            credentials: "include",
+            body: formData,
+        })
+            .then((res) => res.json())
+            .then(
+                (data: {
+                    success: boolean;
+                    filePath: {
+                        size: number;
+                        filepath: string;
+                        newFilename: string;
+                        mimetype: string;
+                        mtime: string;
+                        originalFilename: string;
+                    }[];
+                }) => {
+                    const imageURL = data.filePath[0]?.newFilename;
+                    if (!imageURL) {
+                        return;
+                    }
+
+                    setContent(content + `![${data.filePath[0]?.originalFilename ?? imageURL}](${`/posts/${imageURL}`})`);
+                },
+            );
+    };
+
+    const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+        const image = e.dataTransfer.files[0];
+
+        if (!image) {
+            return;
+        }
+
+        e.preventDefault();
+
+        const formData = new FormData();
+        formData.append("file", image);
+
+        document.cookie = `email=${userData.email}; path=/;`;
+        document.cookie = `password=${userData.password}; path=/;`;
+
+        void fetch("/api/upload", {
+            method: "POST",
+            headers: {
+                Cookie: `email=${userData.email}; password=${userData.password};`,
+            },
+            credentials: "include",
+            body: formData,
+        })
+            .then((res) => res.json())
+            .then(
+                (data: {
+                    success: boolean;
+                    filePath: {
+                        size: number;
+                        filepath: string;
+                        newFilename: string;
+                        mimetype: string;
+                        mtime: string;
+                        originalFilename: string;
+                    }[];
+                }) => {
+                    const imageURL = data.filePath[0]?.newFilename;
+                    if (!imageURL) {
+                        return;
+                    }
+
+                    setContent(content + `![${data.filePath[0]?.originalFilename ?? imageURL}](${`/posts/${imageURL}`})`);
+                },
+            );
+    };
+
     return (
         <>
             <div className="mx-auto w-full max-w-4xl p-4 py-5">
@@ -107,7 +201,15 @@ export default function CreateBlog() {
                                 <label htmlFor="content" className="mb-2 block text-lg font-medium">
                                     Content
                                 </label>
-                                <textarea id="content" className="h-64 w-full rounded-md border p-3 focus:outline-none focus:ring-2 focus:ring-blue-500" value={content} onChange={handleContentChange} placeholder="Write your blog post in Markdown" required />
+                                <div ref={editorRef} onPaste={handlePaste} onDrop={handleDrop} onDragOver={(e) => e.preventDefault()}>
+                                    <textarea id="content" className="h-64 w-full rounded-md border p-3 focus:outline-none focus:ring-2 focus:ring-blue-500" value={content} onChange={handleContentChange} placeholder="Write your blog post in Markdown" required />
+                                </div>
+                            </div>
+                            <div>
+                                <label htmlFor="preview" className="mb-2 block text-lg font-medium">
+                                    Preview
+                                </label>
+                                <MarkdownPreview source={content} />
                             </div>
                             <div>
                                 <label htmlFor="category" className="mb-2 block text-lg font-medium">
@@ -132,20 +234,6 @@ export default function CreateBlog() {
                             </button>
                         </div>
                     </form>
-                    <div className="mb-5 ml-5 mt-10">
-                        <h2 className="mb-4 text-2xl font-semibold">Preview</h2>
-                        <div className="rounded-md border bg-gray-50 p-4">
-                            <ReactMarkdown 
-                                remarkPlugins={[remarkGfm, remarkBreaks]} 
-                                rehypePlugins={[rehypeRaw]} 
-                                components={{
-                                    pre: ({ node, ...props }) => <pre style={{ whiteSpace: "pre-wrap" }} {...props} />,
-                                }}
-                            >
-                                {content}
-                            </ReactMarkdown>
-                        </div>
-                    </div>
                 </div>
             </div>
         </>

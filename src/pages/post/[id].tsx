@@ -3,9 +3,10 @@ import { api } from "~/utils/api";
 import React from "react";
 import Head from "next/head";
 import Navigation from "../components/navigation";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
-import remarkBreaks from "remark-breaks";
+
+import dynamic from "next/dynamic";
+
+const MarkdownPreview = dynamic(() => import("@uiw/react-markdown-preview"), { ssr: false });
 
 const Blog: NextPage<Props> = ({ id }) => {
     const post = api.post.getPost.useQuery({ id });
@@ -25,7 +26,7 @@ const Blog: NextPage<Props> = ({ id }) => {
                             <div>
                                 <h1 className="text-6xl font-bold tracking-wide text-white">{post?.data.title}</h1>
                                 <div className="mt-5 text-white">
-                                    <ReactMarkdown remarkPlugins={[remarkGfm, remarkBreaks]}>{post?.data.content}</ReactMarkdown>
+                                    <MarkdownPreview source={post?.data.content ?? ""} />
                                 </div>
                             </div>
                         ) : (
