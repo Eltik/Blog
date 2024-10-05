@@ -1,3 +1,5 @@
+"use server";
+
 import type { IncomingMessage, ServerResponse } from "http";
 import * as formidable from "formidable";
 import { join } from "path";
